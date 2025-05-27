@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Giỏ hàng của bạn</title>
+</head>
+
+<body>
+    <div class="cart-container">
+        <h1>Giỏ hàng của bạn</h1>
+        <div class="cart-count">
+            <span id="cart-count"><%= cart.reduce((total, item) => total + item.quantity, 0) %></span> sản phẩm trong giỏ hàng
+        </div>
+
+        <% if (cart.length === 0) { %>
+            <p>Giỏ hàng của bạn hiện tại trống.</p>            
+        <% } else { %>
+            <ul class="cart-items">
+                <% cart.forEach(function(item) { %>
+                    <li class="cart-item">
+                        <div class="cart-item-image">
+                            <img src="images/<%= item.image %>" alt="<%= item.name %>">
+                        </div>
+                        <span class="cart-item-name"><%= item.name %></span>
+                        <div class="cart-item-quantity">
+                            <input type="number" class="quantity-input" value="<%= item.quantity %>" onchange="updateQuantity('<%= item.productId %>', this.value)">
+                        </div>
+                        <span class="cart-item-price">Giá: <%= item.price %></span>
+                        <span class="cart-item-total">Tổng: <%= item.quantity * item.price %></span>&nbsp;
+                        <button onclick="removeProduct('<%= item.productId %>')">X</button>
+                    </li>
+                <% }) %>
+            </ul>              
+        <% } %>
+        <a class="cart-footer" href="/">Quay lại trang chủ</a>
+
+    </div>
+
+    <script>
+        function updateCartInfo(cart) {
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = cartCount;
+        }
+        
+        function updateQuantity(productId, quantity) {
+            quantity = parseInt(quantity, 10);
+
+            fetch('/cart/update', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productId: productId, quantity: quantity })
+            })
+            .then(response => response.json())
+
+            .then(data => {
+                renderCartItems(data.cart);
+                updateCartInfo(data.cart);
+            })
+            .catch(error => {
+                console.error("Lỗi khi cập nhật giỏ hàng:", error);
+            });
+        }
+
+        function removeProduct(productId) {           
+            fetch('/cart/remove', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productId: productId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                renderCartItems(data.cart);
+                updateCartInfo(data.cart);
+            })
+            .catch(error => {
+                console.error('Có lỗi khi xóa sản phẩm:', error);
+            });
+        }
+
+        function renderCartItems(cart) {
+            const cartItemsContainer = document.querySelector('.cart-items');
+            cartItemsContainer.innerHTML = ''; 
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p>Giỏ hàng của bạn hiện tại trống.</p> <a class="cart-footer" href="/">Quay lại trang chủ</a>';
+                document.querySelector('.cart-footer').style.display = 'none';
+            } else {
+                cart.forEach(item => {
+                    cartItemsContainer.innerHTML += `
+                        <li class="cart-item">
+                            <div class="cart-item-image">
+                                <img src="images/${item.image}" alt="${item.name}">
+                            </div>
+                            <span class="cart-item-name">${item.name}</span>
+                            <div class="cart-item-quantity">
+                                <input type="number" class="quantity-input" value="${item.quantity}" onchange="updateQuantity('${item.productId}', this.value)">
+                            </div>
+                            <span class="cart-item-price">Giá: ${item.price}</span>
+                            <span class="cart-item-total">Tổng: ${item.quantity * item.price}</span>&nbsp;
+                            <button onclick="removeProduct('${item.productId}')">
+                                X
+                            </button>
+                        </li>
+                    `;
+                });
+                document.querySelector('.cart-footer').style.display = 'block';
+            }
+        }
+
+        fetch('/cart/api')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('API trả về lỗi.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Giỏ hàng:', data.cart);
+                renderCartItems(data.cart);
+                updateCartInfo(data.cart);
+            })
+            .catch(error => {
+                console.error('Lỗi khi tải giỏ hàng:', error);
+            });
+    </script>
+
+</body>
+
+</html>

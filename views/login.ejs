@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Đăng nhập</h1>
+        <form id="loginForm" action="/cart/login" method="POST" >
+            <label for="username">User Name:</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <label for="password">Mật khẩu:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <button class="addbook-btn" type="submit">Đăng nhập</button>
+        </form>
+    </div>
+    <script>
+        const form = document.getElementById('loginForm');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            fetch('/cart/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }) 
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message=='Tên đăng nhập hoặc mật khẩu không đúng.') {
+                    alert(data.message);
+                } else {
+                    window.location.href = '/';
+                }
+            })
+            .catch(error => {
+                console.error('Có lỗi xảy ra:', error);
+            });
+        });
+    </script>
+</body>
+</html>

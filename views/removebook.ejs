@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách Sách</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Danh sách Sách</h1>
+        <table class="book-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên sách</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% products.forEach(function(product) { %>
+                    <tr>
+                        <td><%= product.idProduct %></td>
+                        <td><%= product.nameProduct %></td>
+                        <td>
+                            <form action="/removebook/<%= product.idProduct %>?_method=DELETE" method="POST">
+                                <button class="delete-btn" type="submit">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>            
+        </table>
+        <a href="/">Back to Book List</a>
+    </div>
+</body>
+</html>

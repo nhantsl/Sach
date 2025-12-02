@@ -52,9 +52,9 @@ function getBooks(req, res) {
 }
 
 function addB (req, res){
-    const { nameProduct , priceProduct , images } = req.body;
+    const { nameProduct , priceProduct , images, idCategory } = req.body;
 
-    addBook(nameProduct, priceProduct, images, (err, results) => {
+    addBook(nameProduct, priceProduct, images, idCategory ,(err, results) => {
         if (err) {
             console.error('Lỗi từ model:', err.message);
             return res.status(400).send(err.message);

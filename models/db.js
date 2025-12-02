@@ -70,10 +70,10 @@ const getNav = (callback) => {
     });
 };
 
-const addBook = (nameProduct, priceProduct, images, callback) => {
-    const query = 'INSERT INTO book_products (nameProduct, priceProduct , images) VALUES (?, ?, ?)';
+const addBook = (nameProduct, priceProduct, images, idCategory, callback) => {
+    const query = 'INSERT INTO book_products (nameProduct, priceProduct , images, idCategory) VALUES (?, ?, ?, ?)';
 
-    db.query(query, [nameProduct, priceProduct , images], (err, results) => {
+    db.query(query, [nameProduct, priceProduct , images, idCategory], (err, results) => {
         if (err) {
             console.error('Lỗi khi thêm sách vào cơ sở dữ liệu:', err);
             return callback(err);

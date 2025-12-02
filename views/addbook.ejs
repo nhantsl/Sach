@@ -9,19 +9,27 @@
 <body>
     <div class="container">
         <h1>Add a New Book</h1>
-        <form action="/addbook" method="POST">
+        <form action="/addbook" method="POST" id="addbook">
             <label for="nameProduct">Title:</label>
             <input type="text" name="nameProduct" id="nameProduct" required>
 
             <label for="priceProduct">Price:</label>
             <input type="number" name="priceProduct" id="priceProduct" required>
 
-            <label for="images">Image URL:</label>
-            <input type="text" name="images" id="images">
+            <input type="hidden" name="images" id="images">
+
+            <input type="hidden" name="idCategory" id="idCategory">
 
             <button class="addbook-btn" type="submit">Add Book</button>
         </form>
         <a href="/">Back to Book List</a>
     </div>
+    <script>
+    document.getElementById("addbook").addEventListener("submit", function() {
+        const randomID = Math.floor(Math.random() * 5) + 1;
+        document.getElementById("idCategory").value = randomID;
+        document.getElementById("images").value = randomID + ".jpg";
+    });
+    </script>
 </body>
 </html>

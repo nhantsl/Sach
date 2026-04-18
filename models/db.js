@@ -1,113 +1,156 @@
-const mysql = require('mysql2');
+import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
+dotenv.config({quiet: true});
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'sach'  
+const db = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    port : process.env.DB_PORT,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
-db.connect((err) => {
-    if (err) {
-        console.error('Lỗi kết nối tới cơ sở dữ liệu:', err);
-        return;
+console.log("DB_USER:", process.env.DB_USER);
+console.log("DB_PASS:", process.env.DB_PASS);
+
+db.query('SELECT 1')
+  .then(() => console.log('DB CONNECT OK ✅'))
+  .catch(err => console.log('DB ERROR ❌', err));
+
+const getAllBooks = async () => {
+    try {
+        const [rows] = await db.query('SELECT * FROM book_products');
+        return rows;
+    } catch (err) {
+        console.error('Lỗi khi lấy sách:', err);
+        throw err;
     }
-    console.log('Kết nối thành công đến cơ sở dữ liệu MySQL');
-});
-
-const getAllBooks = (callback) => {
-    db.query('SELECT * FROM book_products', (err, results) => {
-        if (err) {
-            console.error('Lỗi khi lấy sách:', err);
-            return callback(err, null);
-        }
-        if (!results || results.length === 0) {
-            return callback(null, []);
-        }
-        callback(null, results);
-    });
 };
 
-const getBooksPaginated = (page, limit, callback) => {
-    const offset = (page - 1) * limit;
-    const query = 'SELECT * FROM book_products LIMIT ? OFFSET ?';
-    const countQuery = 'SELECT COUNT(*) AS total FROM book_products';
+const getBooksPaginated = async (page, limit) => {
+    try {
+        const offset = (page - 1) * limit;
 
-    db.query(countQuery, (err, countResults) => {
-        if (err) {
-            console.error('Lỗi khi đếm sách:', err);
-            return callback(err, null);
-        }
+        const [[{ total }]] = await db.query(
+            'SELECT COUNT(*) AS total FROM book_products'
+        );
 
-        const totalBooks = countResults[0].total;
+        const [books] = await db.query(
+            'SELECT * FROM book_products LIMIT ? OFFSET ?',
+            [limit, offset]
+        );
 
-        db.query(query, [limit, offset], (err, results) => {
-            if (err) {
-                console.error('Lỗi khi lấy sách:', err);
-                return callback(err, null);
-            }
-
-            callback(null, {
-                totalBooks,
-                totalPages: Math.ceil(totalBooks / limit),
-                currentPage: page,
-                books: results,
-            });
-        });
-    });
+        return {
+            totalBooks: total,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+            books
+        };
+    } catch (err) {
+        console.error('Lỗi:', err);
+        throw err;
+    }
 };
 
-const getNav = (callback) => {
-    db.query('SELECT * FROM book_catalog', (err, results) => {
-        if (err) {
-            console.error('Lỗi: ', err);
-            return callback(err, null);
-        }
-        if (!results || results.length === 0) {
-            return callback(null, []); 
-        }
-        callback(null, results);
-    });
+const getNav = async () => {
+    try {
+        const [rows] = await db.query('SELECT * FROM book_catalog');
+        return rows;
+    } catch (err) {
+        console.error('Lỗi:', err);
+        throw err;
+    }
 };
 
-const addBook = (nameProduct, priceProduct, images, idCategory, callback) => {
-    const query = 'INSERT INTO book_products (nameProduct, priceProduct , images, idCategory) VALUES (?, ?, ?, ?)';
-
-    db.query(query, [nameProduct, priceProduct , images, idCategory], (err, results) => {
-        if (err) {
-            console.error('Lỗi khi thêm sách vào cơ sở dữ liệu:', err);
-            return callback(err);
-        }
-        callback(null, results);
-    });
+const addBook = async (nameProduct, priceProduct, images, idCategory) => {
+    try {
+        const [result] = await db.query(
+            'INSERT INTO book_products (nameProduct, priceProduct, images, idCategory) VALUES (?, ?, ?, ?)',
+            [nameProduct, priceProduct, images, idCategory]
+        );
+        return result;
+    } catch (err) {
+        console.error('Lỗi thêm sách:', err);
+        throw err;
+    }
 };
 
-const removeBook = (idProduct, callback) => {
-    const query = 'DELETE FROM book_products WHERE idProduct = ?';
-
-    db.query(query, [idProduct], (err, results) => {
-        if (err) {
-            console.error('Lỗi :', err);
-            return callback(err);
-        }
-        callback(null, results);
-    });
+const removeBook = async (idProduct) => {
+    try {
+        const [result] = await db.query(
+            'DELETE FROM book_products WHERE idProduct = ?',
+            [idProduct]
+        );
+        return result;
+    } catch (err) {
+        console.error('Lỗi:', err);
+        throw err;
+    }
 };
 
-const getuser = (username, password, callback) => {
-    db.query('SELECT * FROM book_tbluser WHERE username = ? AND password = ?', [username, password], (err, results) => {
-        if (err) {
-            console.error('Lỗi khi lấy người dùng:', err);
-            return callback(err, null);
-        }
-
-        if (!results || results.length === 0) {
-            return callback(null, []);
-        }
-
-        callback(null, results);
-    });
+const getUser = async (username, password) => {
+    try {
+        const [rows] = await db.query(
+            'SELECT * FROM book_tbluser WHERE username = ? AND password = ?',
+            [username, password]
+        );
+        return rows;
+    } catch (err) {
+        console.error('Lỗi user:', err);
+        throw err;
+    }
 };
 
+const getBooksAdvanced = async ({ page, limit, idCategory, search }) => {
+    try {
+        let query = 'SELECT * FROM book_products WHERE 1=1';
+        let countQuery = 'SELECT COUNT(*) as total FROM book_products WHERE 1=1';
+        let params = [];
 
-module.exports = { db, getAllBooks, getNav, addBook, removeBook, getBooksPaginated, getuser};
+        // filter category
+        if (idCategory) {
+            query += ' AND idCategory = ?';
+            countQuery += ' AND idCategory = ?';
+            params.push(idCategory);
+        }
+
+        // search
+        if (search) {
+            query += ' AND nameProduct LIKE ?';
+            countQuery += ' AND nameProduct LIKE ?';
+            params.push(`%${search}%`);
+        }
+
+        // pagination
+        const offset = (page - 1) * limit;
+        query += ' LIMIT ? OFFSET ?';
+        params.push(limit, offset);
+
+        // chạy query
+        const [rows] = await db.query(query, params);
+
+        // count total
+        const [countRows] = await db.query(
+            countQuery,
+            params.slice(0, params.length - 2) // bỏ limit offset
+        );
+
+        const total = countRows[0].total;
+
+        return {
+            products: rows,
+            totalPages: Math.ceil(total / limit) || 1,
+            currentPage: page
+        };
+
+    } catch (err) {
+        console.error('Lỗi getBooksAdvanced:', err);
+        throw err;
+    }
+};
+
+export { db, getAllBooks, getNav, addBook, removeBook, getBooksPaginated, getUser, getBooksAdvanced};
+export const PORT = process.env.PORT || 3000;

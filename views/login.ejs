@@ -32,14 +32,16 @@
                 },
                 body: JSON.stringify({ username, password }) 
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message=='Tên đăng nhập hoặc mật khẩu không đúng.') {
-                    alert(data.message);
-                } else {
-                    window.location.href = '/';
-                }
-            })
+           .then(async (response) => {
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert(data.message);
+                return;
+            }
+            alert(data.message);
+            window.location.href = '/';
+        })
             .catch(error => {
                 console.error('Có lỗi xảy ra:', error);
             });

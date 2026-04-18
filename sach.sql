@@ -68,11 +68,11 @@ CREATE TABLE IF NOT EXISTS `book_tbluser` (
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`idUser`),
   UNIQUE KEY `username` (`username`),
-  `rule` int DEFAULT '0',
+  `role` int DEFAULT '0',
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table sach.book_tbluser: ~0 rows (approximately)
-INSERT INTO `book_tbluser` (`idUser`, `username`, `password`, `rule`) VALUES
+INSERT INTO `book_tbluser` (`idUser`, `username`, `password`, `role`) VALUES
 	(1, 'admin', '1', 1),
 	(2, 'user', 'pass'),
 	(3, 'user2', 'pass2');

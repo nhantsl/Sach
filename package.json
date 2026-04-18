@@ -1,6 +1,7 @@
 {
   "name": "lab",
   "version": "1.0.0",
+   "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -11,12 +12,16 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "body-parser": "^1.20.3",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.1",
     "ejs": "^3.1.10",
     "express": "^4.21.0",
     "express-session": "^1.18.1",
     "method-override": "^3.0.0",
-    "mysql2": "^3.11.4",
-    "node": "^18.20.5"
+    "morgan": "^1.10.1",
+    "mysql2": "^3.11.4"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

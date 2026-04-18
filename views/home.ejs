@@ -12,14 +12,13 @@
 <body>
     <header class="main-header">
         <nav class="main-header_nav">
-            <div class="site"><a href="/">Poly Book Store</a></div>
-
-            
-           
+            <div class="site">
+                <a href="/">Poly Book Store</a>
+            </div>         
             
             <div class="search-container">
                 <form action="/" method="get" class="search-form">
-                    <input type="text" name="que" placeholder="Tìm kiếm sản phẩm..." required class="search-input">
+                    <input type="text" name="search" placeholder="Tìm kiếm sản phẩm..." required class="search-input">
                     <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
                 </form>
             </div>
@@ -40,17 +39,21 @@
                 </li>
             </ul>
 
-            <div>
-                <a href="/cart" id="cart-link">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span id="cart-count" class="cart-count">0</span>
-                </a>
+            <div class="cart">
+                <% if (!user || user.role !== 1) { %>
+                    <a href="/cart" id="cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count" class="cart-count"><%= cartCount %></span>
+                    </a>
+                <% } %>
             </div>
 
-            <% if (user && user.rule === 1) { %>
-                <div> <a href="/addbook"><i class="fa-solid fa-plus"></i> <br> </a></div>
-                <div> <a href="/removebook"><i class="fa-solid fa-minus"></i> <br></a></div>
-            <% }  %>
+            <div>
+                <% if (user && user.role === 1) { %>
+                    <a href="/addbook"><i class="fa-solid fa-plus"></i> </a>
+                    <a href="/removebook"><i class="fa-solid fa-minus"></i></a>
+                <% }  %>
+            </div>
             
             <div>
                 <% if (user) { %>
@@ -85,7 +88,13 @@
                             </p>
                         </div>
                         <div class="card actions">
-                            <button class="btn" onclick="add('<%= product.idProduct %>', '<%= product.nameProduct %>', '<%= product.priceProduct %>', '<%= product.images %>', 1)">Add to Cart</button>
+                            <button class="btn" 
+                            onclick="add('<%= product.idProduct %>', 
+                                        '<%= product.nameProduct %>', 
+                                        '<%= product.priceProduct %>', 
+                                        '<%= product.images %>', 1)">
+                                Add to Cart
+                            </button>
                         </div>
                     </article>
                 <% }); %>
@@ -93,7 +102,7 @@
         </div>
         
         <nav class="pagination">  
-            <% if (products.length > 0) { %>
+            <% if (products && products.length > 0) { %>
                 <% for (let i = 1; i <= totalPages; i++) { %>
                     <a href="/?page=<%= i %>&limit=8" class="<%= currentPage === i ? 'active' : '' %>">
                         <%= i %>
@@ -141,8 +150,10 @@
                 .then(response => {
                     if (response.status === 401) {
                         return response.json();
+                    } else {
+                        window.location.href = '/cart';
+                        return null;
                     }
-                    window.location.href = '/cart';
                 })
                 .then(data => {
                     if (data.message) {

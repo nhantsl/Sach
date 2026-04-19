@@ -29,9 +29,9 @@
                     <ul class="dropdown-menu">
                         <% catalogs.forEach(function(cate) { %>
                             <li>
-                                <a href="/?idCategory=<%= cate.idCategory %>"
+                                <a href="/?idCatalog=<%= cate.idCatalog %>"
                                     class="<%= cate.active ? 'active' : '' %>">
-                                    <%= cate.nameCategory %>
+                                    <%= cate.nameCatalog %>
                                 </a>
                             </li>
                         <% }) %>

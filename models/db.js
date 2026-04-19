@@ -4,21 +4,17 @@ dotenv.config({quiet: true});
 
 const db = mysql.createPool({
     host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
     port : process.env.DB_PORT,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+    user: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+    // waitForConnections: true,
+    // connectionLimit: 10,
+    // queueLimit: 0,
+    ssl: {
+        rejectUnauthorized: true
+      }
 });
-
-console.log("DB_USER:", process.env.DB_USER);
-console.log("DB_PASS:", process.env.DB_PASS);
-
-db.query('SELECT 1')
-  .then(() => console.log('DB CONNECT OK ✅'))
-  .catch(err => console.log('DB ERROR ❌', err));
 
 const getAllBooks = async () => {
     try {
@@ -65,11 +61,11 @@ const getNav = async () => {
     }
 };
 
-const addBook = async (nameProduct, priceProduct, images, idCategory) => {
+const addBook = async (nameProduct, priceProduct, images, idCatalog) => {
     try {
         const [result] = await db.query(
-            'INSERT INTO book_products (nameProduct, priceProduct, images, idCategory) VALUES (?, ?, ?, ?)',
-            [nameProduct, priceProduct, images, idCategory]
+            'INSERT INTO book_products (nameProduct, priceProduct, images, idCatalog) VALUES (?, ?, ?, ?)',
+            [nameProduct, priceProduct, images, idCatalog]
         );
         return result;
     } catch (err) {
@@ -104,17 +100,17 @@ const getUser = async (username, password) => {
     }
 };
 
-const getBooksAdvanced = async ({ page, limit, idCategory, search }) => {
+const getBooksAdvanced = async ({ page, limit, idCatalog, search }) => {
     try {
         let query = 'SELECT * FROM book_products WHERE 1=1';
         let countQuery = 'SELECT COUNT(*) as total FROM book_products WHERE 1=1';
         let params = [];
 
-        // filter category
-        if (idCategory) {
-            query += ' AND idCategory = ?';
-            countQuery += ' AND idCategory = ?';
-            params.push(idCategory);
+        // filter catalog
+        if (idCatalog) {
+            query += ' AND idCatalog = ?';
+            countQuery += ' AND idCatalog = ?';
+            params.push(idCatalog);
         }
 
         // search

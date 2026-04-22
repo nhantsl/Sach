@@ -8,13 +8,13 @@ const db = mysql.createPool({
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
-
+    
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
-    
+
     ssl: {
-        rejectUnauthorized: false
+        rejectUnauthorized: true
     }
 });
 
@@ -151,4 +151,3 @@ const getBooksAdvanced = async ({ page, limit, idCatalog, search }) => {
 };
 
 export { db, getAllBooks, getNav, addBook, removeBook, getBooksPaginated, getUser, getBooksAdvanced};
-export const PORT = process.env.PORT || 3000;

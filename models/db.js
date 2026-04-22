@@ -1,6 +1,7 @@
 import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
 dotenv.config({quiet: true});
+import fs from 'fs';
 
 const db = mysql.createPool({
     host: process.env.DB_HOST,
@@ -14,7 +15,7 @@ const db = mysql.createPool({
     queueLimit: 0,
 
     ssl: {
-        rejectUnauthorized: true
+        ca: fs.readFileSync('isrgrootx1.pem')
     }
 });
 

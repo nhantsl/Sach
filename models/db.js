@@ -8,12 +8,13 @@ const db = mysql.createPool({
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
+
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
+    
     ssl: {
-        minVersion: 'TLSv1.2',
-        rejectUnauthorized: true
+        rejectUnauthorized: false
     }
 });
 

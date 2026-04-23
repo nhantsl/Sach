@@ -9,30 +9,43 @@ Thông tin các tài khoản test để dùng trong môi trường phát triển
 
 ---
 # 📚 Book Store Web App
+🌐 Demo
+
+👉 Live: https://sach-kct5.onrender.com
+👉 Repo: https://github.com/nhantsl/Sach
 
 ## 📌 Giới thiệu
 
-Đây là project web bán sách đơn giản được xây dựng bằng Node.js và Express.
-Ứng dụng cho phép người dùng xem danh sách sách, tìm kiếm, lọc theo danh mục, phân trang và quản lý giỏ hàng.
+Đây là ứng dụng web bán sách đơn giản xây dựng bằng Node.js + Express theo kiến trúc backend cơ bản
 
-Mục tiêu của project:
+Ứng dụng cho phép:
 
-* Áp dụng kiến trúc backend chuẩn (MVC + Service + Repository)
-* Làm quen với xử lý dữ liệu, session và MySQL
-* Chuẩn bị cho vị trí Fresher Backend Developer
+* Phân trang
+* Tìm kiếm & lọc theo danh mục
+* Quản lý giỏ hàng (session)
+* CRUD sản phẩm (Admin)
+
 
 ---
 
 ## 🚀 Công nghệ sử dụng
 
-* **Node.js**
-* **Express.js**
-* **EJS (Template Engine)**
-* **MySQL (mysql2)**
-* **express-session**
-* **dotenv**
-* **tailwind**
-
+**Backend**
+Node.js (ES Modules)
+Express.js
+EJS (Template Engine)
+**Database**
+TiDB (MySQL-compatible)
+mysql2 (driver)
+**Deployment**
+Server: Render
+Database: TiDB Cloud
+**Other**
+express-session
+dotenv
+morgan
+method-override
+Tailwind CSS
 ---
 
 ## 🏗️ Cấu trúc project

@@ -4,34 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Danh sách Sách</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/output.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Danh sách Sách</h1>
-        <table class="book-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tên sách</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% products.forEach(function(product) { %>
+    <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
+
+        <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">
+            Danh sách Sách
+        </h1>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden">
+                <thead class="bg-green-500 text-white">
                     <tr>
-                        <td><%= product.idProduct %></td>
-                        <td><%= product.nameProduct %></td>
-                        <td>
-                            <form action="/removebook/<%= product.idProduct %>?_method=DELETE" method="POST">
-                                <button class="delete-btn" type="submit">Xóa</button>
-                            </form>
-                        </td>
+                        <th class="px-4 py-2 text-left">ID</th>
+                        <th class="px-4 py-2 text-left">Tên sách</th>
+                        <th class="px-4 py-2 text-center">Hành động</th>
                     </tr>
-                <% }); %>
-            </tbody>            
-        </table>
-        <a href="/">Back to Book List</a>
+                </thead>
+
+                <tbody class="text-gray-700">
+                    <% products.forEach(function(product) { %>
+                        <tr class="border-t hover:bg-gray-100 transition">
+                            <td class="px-4 py-2"><%= product.idProduct %></td>
+                            <td class="px-4 py-2"><%= product.nameProduct %></td>
+                            <td class="px-4 py-2 text-center">
+                                <form action="/removebook/<%= product.idProduct %>?_method=DELETE" method="POST">
+                                    <button 
+                                        type="submit"
+                                        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
+                                    >
+                                        Xóa
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>            
+            </table>
+        </div>
+
+        <a 
+            href="/" 
+            class="block text-center text-blue-500 mt-6 hover:underline"
+        >
+            Back to Book List
+        </a>
     </div>
 </body>
 </html>

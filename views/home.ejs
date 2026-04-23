@@ -5,32 +5,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Poly Book Store</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/output.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 
-<body>
-    <header class="main-header">
-        <nav class="main-header_nav">
-            <div class="site">
-                <a href="/">Poly Book Store</a>
+<body class="font-sans bg-gray-100 min-h-screen m-0 p-0">
+    <header class="bg-gray-800 text-white px-5 py-3">
+        <nav class="flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <a href="/" class="text-xl font-bold hover:text-gray-300">Poly Book Store</a>
             </div>         
             
-            <div class="search-container">
-                <form action="/" method="get" class="search-form">
-                    <input type="text" name="search" placeholder="Tìm kiếm sản phẩm..." required class="search-input">
-                    <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+            <div class="flex justify-center">
+                <form action="/" method="get" class="flex items-center gap-2">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        placeholder="Tìm kiếm sản phẩm..." 
+                        required
+                        class="w-72 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    >
+
+                    <button 
+                        type="submit" 
+                        class="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition"
+                    >
+                        <i class="fas fa-search"></i>
+                    </button>
+
                 </form>
             </div>
 
-            <ul class="main-header_item-list">
-                <li class="main-header_item dropdown">
-                    <a href="#" class="dropdown-toggle"><i class="fa-solid fa-bars"></i></a>
-                    <ul class="dropdown-menu">
+            <ul class="flex">
+                <li class="relative group">
+                    <a href="#" class="px-3 py-2 text-white text-xl">
+                        <i class="fa-solid fa-bars"></i>
+                    </a>
+                    <ul class="absolute left-0 top-full hidden group-hover:block bg-gray-800 min-w-[200px] shadow-lg z-50 rounded">
                         <% catalogs.forEach(function(cate) { %>
                             <li>
                                 <a href="/?idCatalog=<%= cate.idCatalog %>"
-                                    class="<%= cate.active ? 'active' : '' %>">
+                                    class="block px-4 py-2 text-white hover:bg-gray-700 <%= cate.active ? 'active' : '' %>">
                                     <%= cate.nameCatalog %>
                                 </a>
                             </li>
@@ -39,81 +54,145 @@
                 </li>
             </ul>
 
-            <div class="cart">
+            <!-- CART -->
+            <div class="flex items-center gap-4">
+
                 <% if (!user || user.role !== 1) { %>
-                    <a href="/cart" id="cart-link">
+                    <a href="/cart" id="cart-link" class="relative text-white text-xl hover:text-gray-300">
                         <i class="fas fa-shopping-cart"></i>
-                        <span id="cart-count" class="cart-count"><%= cartCount %></span>
+
+                        <!-- cart count -->
+                        <span id="cart-count"
+                            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 rounded-full">
+                            <%= cartCount %>
+                        </span>
                     </a>
                 <% } %>
-            </div>
 
-            <div>
+                <!-- ADMIN -->
                 <% if (user && user.role === 1) { %>
-                    <a href="/addbook"><i class="fa-solid fa-plus"></i> </a>
-                    <a href="/removebook"><i class="fa-solid fa-minus"></i></a>
-                <% }  %>
-            </div>
-            
-            <div>
-                <% if (user) { %>
-                    <a href="/cart/logout"><i class="fa-solid fa-right-from-bracket"></i></a>
-                <% } else { %>
-                    <a href="/cart/login"><i class="fa-solid fa-user"></i></a>
+                    <div class="flex items-center gap-3 text-white text-xl">
+                        <a href="/addbook" class="hover:text-green-400">
+                            <p class="font-bold">Thêm sách</p>
+                        </a>
+
+                        <a href="/removebook" class="hover:text-red-400">
+                            <p class="font-bold">Xóa sách</p>
+                        </a>
+                    </div>
                 <% } %>
+
+                <!-- AUTH -->
+                <div class="text-white text-xl">
+                    <% if (user) { %>
+                        <a href="/cart/logout" class="hover:text-red-400">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </a>
+                    <% } else { %>
+                        <a href="/cart/login" class="hover:text-blue-400">
+                            <i class="fa-solid fa-user"></i>
+                        </a>
+                    <% } %>
+                </div>
+
             </div>
-            
             
         </nav>
     </header>
     <main align="center">
-        <div class="grid">
-            <% if ( !products || products.length === 0) { %>
-                <p><%= message || 'Không có sản phẩm nào.' %></p>
+        <div class="grid grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 gap-5 justify-items-center p-3">
+            <% if (!products || products.length === 0) { %>
+                <p class="col-span-full text-center text-gray-600">
+                    <%= message || 'Không có sản phẩm nào.' %>
+                </p>
             <% } else { %>
                 <% products.forEach(function(product) { %>
-                    <article class="card product-item">
-                        <header class="card header">
-                            <h1 class="product title">
+                    <article class="w-full max-w-[300px] shadow-sm rounded">
+                        <!-- TITLE -->
+                        <header class="p-3">
+                            <h1 class="text-lg font-semibold">
                                 <%= product.nameProduct %>
                             </h1>
                         </header>
-                        <div class="card image">
-                            <img src="images/<%= product.images %>" alt="Product Image">
+
+                        <!-- IMAGE -->
+                        <div>
+                            <img 
+                                src="images/<%= product.images %>" 
+                                alt="Product Image" 
+                                class="w-3/4 h-100 object-cover rounded-lg mx-auto"
+                            >
                         </div>
-                        <div class="card content">
-                            <h2 class="product price"><%= product.priceProduct %> đ</h2>
-                            <p class="product description">
-                                <%= product.sortDescription %>
-                            </p>
+
+                        <!-- CONTENT -->
+                        <div class="p-3 flex-1">
+                            <h2 class="text-green-600 font-bold text-lg">
+                                <%= product.priceProduct %> đ
+                            </h2>
                         </div>
-                        <div class="card actions">
-                            <button class="btn" 
-                            onclick="add('<%= product.idProduct %>', 
-                                        '<%= product.nameProduct %>', 
-                                        '<%= product.priceProduct %>', 
-                                        '<%= product.images %>', 1)">
+
+                        <!-- ACTION -->
+                        <div class="p-3">
+                            <button 
+                                class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                                onclick="add('<%= product.idProduct %>', 
+                                            '<%= product.nameProduct %>', 
+                                            '<%= product.priceProduct %>', 
+                                            '<%= product.images %>', 1)"
+                            >
                                 Add to Cart
                             </button>
                         </div>
+
                     </article>
                 <% }); %>
+
             <% } %>
+
         </div>
         
-        <nav class="pagination">  
+        <nav class="flex justify-center items-center gap-2 mt-6 mb-2">
+
             <% if (products && products.length > 0) { %>
                 <% for (let i = 1; i <= totalPages; i++) { %>
-                    <a href="/?page=<%= i %>&limit=8" class="<%= currentPage === i ? 'active' : '' %>">
+
+                    <a href="/?page=<%= i %>&limit=8"
+                    class="px-3 py-1 border rounded-md text-sm transition
+                            <%= currentPage === i 
+                                ? 'bg-blue-500 text-white border-blue-500' 
+                                : 'bg-white text-gray-700 hover:bg-gray-100' %>">
                         <%= i %>
                     </a>
+
                 <% } %>
             <% } %>
-        </nav>
 
+        </nav>
     </main>
+
+    <div id="toast" class="fixed top-5 right-5 hidden">
+        <div id="toast-content" class="bg-green-500 text-white px-4 py-2 rounded shadow-lg transition">
+        </div>
+    </div>
     
     <script>
+        function showToast(message, type = "success") {
+            const toast = document.getElementById('toast');
+            const content = document.getElementById('toast-content');
+
+            content.textContent = message;
+
+            // đổi màu theo type
+            content.className = "text-white px-4 py-2 rounded shadow-lg transition " + 
+                (type === "error" ? "bg-red-500" : "bg-green-500");
+
+            toast.classList.remove('hidden');
+
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 2000);
+        }
+
         function add(productId,nameProduct, priceProduct, images, quantity) {
             fetch('/cart/add', {
                 method: 'POST',
@@ -130,7 +209,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    alert(data.message);
+                    showToast(data.message);
                     updateCartInfo(data.cart); 
                 })
                 .catch(error => {
@@ -157,7 +236,7 @@
                 })
                 .then(data => {
                     if (data.message) {
-                        alert(data.message);
+                        showToast(data.message);
                     }
                 })
                 .catch(error => {

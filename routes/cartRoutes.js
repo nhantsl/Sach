@@ -33,8 +33,11 @@ router.get('/', (req, res) => {
 router.post('/add', (req, res) => {    
     const { productId, nameProduct, priceProduct, image, quantity } = req.body;
     const user = req.session.user;
-    if (!req.session.user || user.role === 1) {
-        return res.status(401).json({ message: 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.' });
+    if (!req.session.user) {
+        return res.status(401).json({ message: 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng' });
+    }
+    if (user.role === 1) {
+        return res.status(401).json({ message: 'Admin không dùng chức năng này' });
     }
 
     const existingItem = req.session.cart.find(item => item.productId === productId);

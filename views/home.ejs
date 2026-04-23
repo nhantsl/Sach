@@ -41,7 +41,7 @@
                     <a href="#" class="px-3 py-2 text-white text-xl">
                         <i class="fa-solid fa-bars"></i>
                     </a>
-                    <ul class="absolute left-0 top-full hidden group-hover:block bg-gray-800 min-w-[200px] shadow-lg z-50 rounded">
+                    <ul class="absolute left-0 top-full hidden group-hover:block bg-gray-800 min-w-50 shadow-lg z-50 rounded">
                         <% catalogs.forEach(function(cate) { %>
                             <li>
                                 <a href="/?idCatalog=<%= cate.idCatalog %>"
@@ -107,7 +107,7 @@
                 </p>
             <% } else { %>
                 <% products.forEach(function(product) { %>
-                    <article class="w-full max-w-[300px] shadow-sm rounded">
+                    <article class="w-full max-w-75 shadow-sm rounded">
                         <!-- TITLE -->
                         <header class="p-3">
                             <h1 class="text-lg font-semibold">
@@ -159,8 +159,8 @@
                     <a href="/?page=<%= i %>&limit=8"
                     class="px-3 py-1 border rounded-md text-sm transition
                             <%= currentPage === i 
-                                ? 'bg-blue-500 text-white border-blue-500' 
-                                : 'bg-white text-gray-700 hover:bg-gray-100' %>">
+                                ? 'bg-blue-500 border-blue-500' 
+                                : 'bg-white hover:bg-gray-100' %>">
                         <%= i %>
                     </a>
 

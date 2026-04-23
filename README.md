@@ -1,51 +1,57 @@
-# 📝 Accounts Demo
+# 📚 Book Store Web App
 
-Thông tin các tài khoản test để dùng trong môi trường phát triển:
-
-| Loại tài khoản | Username | Password | Quyền hạn |
-|----------------|----------|----------|-----------|
-| Admin          | admin    | 1        | Quản trị hệ thống |
-| User           | user     | pass     | User bình thường |
+🌐 **Demo**  
+- 👉 Live: https://sach-kct5.onrender.com  
+- 👉 Source Code: https://github.com/nhantsl/Sach  
 
 ---
-# 📚 Book Store Web App
-🌐 Demo
-
-👉 Live: https://sach-kct5.onrender.com
-👉 Repo: https://github.com/nhantsl/Sach
 
 ## 📌 Giới thiệu
 
-Đây là ứng dụng web bán sách đơn giản xây dựng bằng Node.js + Express theo kiến trúc backend cơ bản
+Đây là ứng dụng web bán sách đơn giản được xây dựng bằng **Node.js + Express** theo mô hình backend phân tầng.
 
-Ứng dụng cho phép:
+Ứng dụng tập trung vào việc mô phỏng các chức năng cơ bản của một hệ thống e-commerce:
 
-* Phân trang
-* Tìm kiếm & lọc theo danh mục
-* Quản lý giỏ hàng (session)
-* CRUD sản phẩm (Admin)
+- Hiển thị danh sách sản phẩm
+- Tìm kiếm & lọc
+- Quản lý giỏ hàng
+- CRUD sản phẩm (Admin)
 
+---
+
+## 🧪 Tài khoản demo
+
+Dùng để test trong môi trường development:
+
+| Role  | Username | Password | Quyền |
+|------|--------|--------|------|
+| Admin | admin | 1 | Quản trị hệ thống |
+| User  | user  | pass | Người dùng |
 
 ---
 
 ## 🚀 Công nghệ sử dụng
 
-**Backend**
-Node.js (ES Modules)
-Express.js
-EJS (Template Engine)
-**Database**
-TiDB (MySQL-compatible)
-mysql2 (driver)
-**Deployment**
-Server: Render
-Database: TiDB Cloud
-**Other**
-express-session
-dotenv
-morgan
-method-override
-Tailwind CSS
+### 🔧 Backend
+- Node.js (ES Modules)
+- Express.js
+- EJS (Template Engine)
+
+### 🗄️ Database
+- TiDB Cloud (MySQL-compatible)
+- mysql2
+
+### 🌍 Deployment
+- Render (Server)
+- TiDB Cloud (Database)
+
+### ⚙️ Khác
+- express-session
+- dotenv
+- morgan
+- method-override
+- Tailwind CSS
+
 ---
 
 ## 🏗️ Cấu trúc project
@@ -54,10 +60,9 @@ Tailwind CSS
 project/
 ├── src/
 │   ├── app.js
+│   ├── controllers/
 │   ├── services/
-│   ├── repositories/
-|   |── controllers/
-|   |── middlewares/
+│   ├── middlewares/
 │
 ├── routers/
 ├── models/
@@ -70,25 +75,29 @@ project/
 
 ---
 
-## 🔄 Kiến trúc
+## 🔄 Kiến trúc hệ thống
 
 ```
-Route → Controller → Service → Database
+Route → Controller → Service  → Database
 ```
 
-* **Controller**: xử lý request/response
-* **Service**: xử lý business logic
-* **Model/DB**: truy vấn dữ liệu
+### Giải thích:
+
+- **Controller**: nhận request, trả response
+- **Service**: xử lý logic nghiệp vụ
+- **Repository**: thao tác với database
+- **Database**: lưu trữ dữ liệu
 
 ---
 
 ## ✨ Tính năng chính
 
-* 📖 Hiển thị danh sách sách
-* 🔍 Tìm kiếm sản phẩm theo tên
-* 🏷️ Lọc theo danh mục
-* 📄 Phân trang
-* 🛒 Giỏ hàng (session)
-* ➕ Thêm / ❌ Xóa sản phẩm
+- 📖 Hiển thị danh sách sách
+- 🔍 Tìm kiếm theo tên
+- 🏷️ Lọc theo danh mục
+- 📄 Phân trang
+- 🛒 Giỏ hàng (session-based)
+- ➕ Thêm sản phẩm
+- ❌ Xóa sản phẩm
 
 ---

@@ -27,19 +27,21 @@
                 <% cart.forEach(function(item) { %>
                     <li class="flex items-center max-w-5/6 mx-auto gap-4 p-3 rounded-lg shadow-sm hover:bg-gray-50 transition">
 
-                        <!-- IMAGE -->
-                        <div class="w-10">
-                            <img 
-                                src="images/<%= item.image %>" 
-                                alt="<%= item.name %>"
-                                class="object-cover rounded"
-                            >
+                        <div class="w-1/5">
+                            <!-- NAME -->
+                            <span class="font-medium text-gray-800 text-sm">
+                                <%= item.name %>
+                            </span>
+    
+                            <!-- IMAGE -->
+                            <div class="w-10">
+                                <img 
+                                    src="images/<%= item.image %>" 
+                                    alt="<%= item.name %>"
+                                    class="object-cover rounded"
+                                >
+                            </div>
                         </div>
-
-                        <!-- NAME -->
-                        <span class="flex-1 font-medium text-gray-800">
-                            <%= item.name %>
-                        </span>
 
                         <!-- QUANTITY -->
                         <input 
@@ -140,21 +142,24 @@
             } else {
                 cart.forEach(item => {
                     cartItemsContainer.innerHTML += `
-                        <li class="flex items-center max-w-5/6 mx-auto gap-4 p-3 rounded-lg shadow-sm hover:bg-gray-50 transition">
+                        <li class="flex justify-between items-center gap-4 p-3 rounded-lg shadow-sm hover:bg-gray-50 transition">
 
-                        <!-- IMAGE -->
-                        <div class="w-10">
-                            <img 
-                                src="images/${item.image}" 
-                                alt="${item.name}"
-                                class="object-cover rounded"
-                            >
+                        <div class="w-1/5">
+                            <!-- NAME -->
+                            <span class="font-medium text-gray-800 text-sm">
+                                ${item.name}
+                            </span>
+                            
+                            <!-- IMAGE -->
+                            <div class="w-10 ms-1">
+                                <img 
+                                    src="images/${item.image}" 
+                                    alt="${item.name}"
+                                    class="object-cover rounded"
+                                >
+                            </div>
                         </div>
 
-                        <!-- NAME -->
-                        <span class="flex-1 font-medium text-gray-800">
-                            ${item.name}
-                        </span>
 
                         <!-- QUANTITY -->
                         <input 

@@ -11,24 +11,26 @@
 
 <body class="font-sans bg-gray-100 min-h-screen m-0 p-0">
     <header class="bg-gray-800 text-white px-5 py-3">
-        <nav class="flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <a href="/" class="text-xl font-bold hover:text-gray-300">Poly Book Store</a>
+        <nav class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center justify-between w-full sm:w-auto">
+                <a href="/" class="text-xl font-bold hover:text-gray-300">
+                    Poly Book Store
+                </a>
             </div>         
             
-            <div class="flex justify-center">
-                <form action="/" method="get" class="flex items-center gap-2">
+            <div class="w-full sm:w-auto">
+                <form action="/" method="get" class="flex gap-2">
                     <input 
                         type="text" 
                         name="search" 
                         placeholder="Tìm kiếm sản phẩm..." 
                         required
-                        class="w-72 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                     >
 
-                    <button 
+                    <button
                         type="submit" 
-                        class="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition"
+                        class=" px-4 py-2 rounded-md hover:bg-gray-700 transition"
                     >
                         <i class="fas fa-search"></i>
                     </button>
@@ -36,12 +38,15 @@
                 </form>
             </div>
 
+
             <ul class="flex">
-                <li class="relative group">
-                    <a href="#" class="px-3 py-2 text-white text-xl">
+                <li class="relative">
+                    <button onclick="toggleDropdown()" class="px-3 py-2 text-white text-xl">
                         <i class="fa-solid fa-bars"></i>
-                    </a>
-                    <ul class="absolute left-0 top-full hidden group-hover:block bg-gray-800 min-w-50 shadow-lg z-50 rounded">
+                    </button>
+
+                    <ul id="dropdownMenu" class="hidden absolute bg-gray-800 rounded mt-2 w-48">
+                        
                         <% catalogs.forEach(function(cate) { %>
                             <li>
                                 <a href="/?idCatalog=<%= cate.idCatalog %>"
@@ -50,11 +55,11 @@
                                 </a>
                             </li>
                         <% }) %>
+
                     </ul>
                 </li>
             </ul>
 
-            <!-- CART -->
             <div class="flex items-center gap-4">
 
                 <% if (!user || user.role !== 1) { %>
@@ -96,18 +101,18 @@
                 </div>
 
             </div>
-            
+
         </nav>
     </header>
     <main align="center">
-        <div class="grid grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 gap-5 justify-items-center p-3">
+        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5 justify-items-center p-3">
             <% if (!products || products.length === 0) { %>
                 <p class="col-span-full text-center text-gray-600">
                     <%= message || 'Không có sản phẩm nào.' %>
                 </p>
             <% } else { %>
                 <% products.forEach(function(product) { %>
-                    <article class="w-full max-w-75 shadow-sm rounded">
+                    <article class="w-full shadow-sm rounded">
                         <!-- TITLE -->
                         <header class="p-3">
                             <h1 class="text-lg font-semibold">
@@ -118,9 +123,9 @@
                         <!-- IMAGE -->
                         <div>
                             <img 
+                                class="object-cover w-3/4 sm:h-40 md:h-100 lg:h-full rounded-lg mx-auto"
                                 src="images/<%= product.images %>" 
                                 alt="Product Image" 
-                                class="w-3/4 h-100 object-cover rounded-lg mx-auto"
                             >
                         </div>
 
@@ -134,7 +139,7 @@
                         <!-- ACTION -->
                         <div class="p-3">
                             <button 
-                                class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                                class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition text-sm sm:text-base"
                                 onclick="add('<%= product.idProduct %>', 
                                             '<%= product.nameProduct %>', 
                                             '<%= product.priceProduct %>', 
@@ -176,6 +181,11 @@
     </div>
     
     <script>
+        function toggleDropdown() {
+            const menu = document.getElementById("dropdownMenu");
+            menu.classList.toggle("hidden");
+        }
+        
         function showToast(message, type = "success") {
             const toast = document.getElementById('toast');
             const content = document.getElementById('toast-content');
